@@ -1,0 +1,18 @@
+<div class="form-group" [class.show]="isOpen" [class.valid]="valid" [class.error]="error">
+  <div (click)="toggleOpen()">
+    <label class="label" [class.input-valid]="selectedOption">{{label}}</label>
+    <div class="form-control">
+      <span>{{selectedOption?.value}}</span>
+      <i class="fa arrow" [ngClass]="{'fa-angle-up': isOpen, 'fa-angle-down': !isOpen}"></i>
+    </div>
+  </div>
+  <div class="select-dropdown">
+    <div class="select-option"
+         *ngFor="let option of options"
+         (click)="onSelect(option)">
+      {{option.value}}
+    </div>
+  </div>
+  <i class="icon"></i>
+  <span class="tooltip">Тема сообщения</span>
+</div>

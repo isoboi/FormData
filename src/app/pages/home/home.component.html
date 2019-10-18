@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="content">
+    <p>Form data:</p>
+    <p *ngIf="!formData">Форма пока не заполнена.</p>
+    <ng-container *ngIf="formData">
+      <p>{{formData.name}}</p>
+      <p>{{formData.email}}</p>
+      <p>{{formData.postSubject}}</p>
+      <p>{{formData.post}}</p>
+    </ng-container>
+    <button class="btn btn-success mt-20" routerLink="{{formData ? 'form/edit' : 'form'}}">{{formData ? 'Изменить' : 'Заполнить форму'}}</button>
+  </div>
+</div>

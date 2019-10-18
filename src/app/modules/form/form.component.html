@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="form">
+    <form [formGroup]="form" (submit)="onSubmit()">
+      <h1 class="title">Форма для тебя</h1>
+      <div class="form-group"
+           [ngClass]="{
+            'valid': (submitted && form.get('name').valid),
+            'error': (submitted && form.get('name').invalid)
+          }">
+        <input type="text" id="name" class="form-control" formControlName="name" required>
+        <label for="name" class="label">Представьтесь пожалуйста</label>
+        <i class="icon"></i>
+        <span class="tooltip">Представьтесь пожалуйста</span>
+      </div>
+      <div class="form-group"
+           [ngClass]="{
+            'valid': (submitted && form.get('email').valid),
+            'error': (submitted && form.get('email').invalid)
+          }">
+        <input type="text" id="email" class="form-control" formControlName="email" required>
+        <label for="email" class="label">Введите ваш e-mail</label>
+        <i class="icon"></i>
+        <span class="tooltip">Введите ваш e-mail</span>
+      </div>
+      <div class="form-group">
+        <app-select id="select"
+                    label="Тема сообщения"
+                    (selectChange)="selectChange($event)"
+                    [error]="(submitted && form.get('postSubject').invalid)"
+                    [valid]="(submitted && form.get('postSubject').valid)"
+                    [selected]="form.get('postSubject').value"
+                    [options]="options"></app-select>
+      </div>
+      <div class="form-group"
+           [ngClass]="{
+            'valid': (submitted && form.get('post').valid),
+            'error': (submitted && form.get('post').invalid)
+          }">
+        <textarea rows="4" class="form-control" formControlName="post" placeholder="Введите сообщение"></textarea>
+        <i class="icon"></i>
+        <span class="tooltip">Введите сообщение</span>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn" (click)="resetForm()">Сбросить</button>
+        <button class="btn btn-success">Отправить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
