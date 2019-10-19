@@ -29,7 +29,7 @@
                     [error]="(submitted && form.get('postSubject').invalid)"
                     [valid]="(submitted && form.get('postSubject').valid)"
                     [selected]="form.get('postSubject').value"
-                    [options]="options"></app-select>
+                    [options]="options | async"></app-select>
       </div>
       <div class="form-group"
            [ngClass]="{

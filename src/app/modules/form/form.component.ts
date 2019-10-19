@@ -1,53 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { formDataAction } from '../../core/store/actions/form.actions';
-import { getFormData } from '../../core/store';
+import { ApiService } from '../../core/services';
+import { Observable, Subject } from 'rxjs';
+import { IOption } from '../../core/models';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
+  options: Observable<IOption[]>;
   submitted = false;
-  options = [
-    {key: 1, value: 'Тема 1'},
-    {key: 2, value: 'Тема 2'},
-    {key: 3, value: 'Тема 3'},
-    {key: 4, value: 'Тема 4'},
-  ];
+
+  private _destroy$ = new Subject<boolean>();
 
   constructor(private _fb: FormBuilder,
               private _router: Router,
-              private _store: Store<{formData}>) {
+              private _apiService: ApiService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._initForm();
     this._getFormData();
+    this._getOptions();
   }
 
-  onSubmit() {
+  ngOnDestroy(): void {
+    this._destroy$.next(true);
+    this._destroy$.unsubscribe();
+  }
+
+  onSubmit(): void {
     this.submitted = true;
     if (this.form.valid) {
-      this._store.dispatch(formDataAction({payload: this.form.value}));
+      this._apiService.setFormData(this.form.value);
       this._router.navigate(['/']);
     }
   }
 
-  selectChange(e) {
+  selectChange(e: IOption): void {
     this.form.patchValue({postSubject: e.value});
   }
 
-  resetForm() {
+  resetForm(): void {
     this.form.reset();
   }
 
-  private _initForm() {
+  private _initForm(): void {
     this.form = this._fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -56,12 +60,13 @@ export class FormComponent implements OnInit {
     });
   }
 
-  private _getFormData() {
-    this._store.pipe(select(getFormData))
-      .subscribe(res => {
-        if (res) {
-          this.form.patchValue(res);
-        }
-      });
+  private _getFormData(): void {
+    this._apiService.getFormData()
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(res => this.form.patchValue(res || {}));
+  }
+
+  private _getOptions(): void {
+    this.options = this._apiService.getOptions();
   }
 }

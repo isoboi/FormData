@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { ISelect } from './select.model';
+import { IOption } from '../../core/models';
 
 @Component({
   selector: 'app-select',
@@ -8,14 +8,14 @@ import { ISelect } from './select.model';
 })
 export class SelectComponent implements OnInit {
 
-  @Input() options: ISelect[];
+  @Input() options: IOption[];
   @Input() label: string;
   @Input() error: boolean;
   @Input() valid: boolean;
   @Input() selected: string;
   @Output() selectChange = new EventEmitter();
 
-  selectedOption: ISelect;
+  selectedOption: IOption;
   isOpen = false;
 
   @HostListener('document:click', ['$event.target'])
@@ -33,7 +33,7 @@ export class SelectComponent implements OnInit {
     this._defaultSelected();
   }
 
-  onSelect(option: ISelect) {
+  onSelect(option: IOption) {
     this.selectedOption = option;
     this.selectChange.emit(option);
     this.isOpen = false;

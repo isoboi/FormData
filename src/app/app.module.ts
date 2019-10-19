@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routing';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './core/store';
+import { ApiService } from './core/services';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -25,7 +26,7 @@ import { HomeComponent } from './pages/home/home.component';
       },
     })
   ],
-  providers: [],
+  providers: [ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
